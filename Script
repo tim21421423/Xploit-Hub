@@ -1,0 +1,165 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Xploit Hub", "Midnight")
+
+-- Scripts Tab
+local ScriptsTab = Window:NewTab("Scripts")
+local ScriptsSection = ScriptsTab:NewSection("Script Executor")
+
+ScriptsSection:NewButton("Fly V3 GUI", "Launches Fly V3 GUI script", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+end)
+
+ScriptsSection:NewButton("Fling Script", "Launches Fling Player script", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Auto%20Fling%20Player'))()
+end)
+
+ScriptsSection:NewButton("GhostHub", "Launches GhostHub script", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/GhostHub'))()
+end)
+
+ScriptsSection:NewButton("Bang", "Launches Bang GUI script", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/4gh9/Bang-Script-Gui/main/bang%20gui.lua'))()
+end)
+
+ScriptsSection:NewButton("NoClip Tool", "Gives a NoClip tool to the player", function()
+    local tool = Instance.new("Tool")
+    tool.Name = "NoClip"
+    tool.RequiresHandle = false
+
+    local function enableNoClip(character)
+        game:GetService("RunService").Stepped:Connect(function()
+            if character and tool.Parent == character then
+                for _, part in pairs(character:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                    end
+                end
+            end
+        end)
+    end
+
+    tool.Equipped:Connect(function()
+        local character = tool.Parent
+        enableNoClip(character)
+    end)
+
+    tool.Parent = game.Players.LocalPlayer.Backpack
+end)
+
+ScriptsSection:NewButton("Defusal FPS Script", "Launches Defusal FPS script", function()
+    loadstring(game:HttpGet("https://gist.githubusercontent.com/KingScripter1/ac239e38d9aba08c472fe011b074163d/raw/c33abf7017ac642714c5c77279675ca600ca7284/defuasl%20or%20smt%20idk%20what%20its%20called"))()
+end)
+
+ScriptsSection:NewButton("Loader Scripter", "Launches Loader Scripter", function()
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/blackowl1231/ZYPHERION/refs/heads/main/main.lua')))()
+end)
+
+ScriptsSection:NewButton("F3X Script", "F3X/Btools Script", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/tim21421423/c00lVoid_8-Gui/main/Script"))()
+end)
+
+ScriptsSection:NewButton("Wall Hop V3", "Launched Wallhop Script", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/ScpGuest666/Random-Roblox-script/refs/heads/main/Roblox%20WallHop%20V3%20script'))()
+end)
+
+ScriptsSection:NewButton("Fake IP Finder", "Fake IP Finder For Trolling", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/tim21421423/Fake-IP-Script/refs/heads/main/Script"))()
+end)
+
+-- Other Tab
+local OtherTab = Window:NewTab("Other")
+local OtherSection = OtherTab:NewSection("Player Modifications")
+
+-- Speed
+OtherSection:NewLabel("Speed")
+OtherSection:NewSlider("Speed Value", "Adjust player walk speed", 100, 16, function(value)
+    local humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+    if humanoid then
+        humanoid.WalkSpeed = value
+    end
+end)
+
+-- Jump Power
+OtherSection:NewLabel("JumpPower")
+OtherSection:NewSlider("Jump Power Value", "Adjust player jump power", 100, 50, function(value)
+    local humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+    if humanoid then
+        humanoid.JumpPower = value
+    end
+end)
+
+-- Infinite Jump
+local InfiniteJumpEnabled = false
+OtherSection:NewToggle("Infinite Jump", "Toggle infinite jump", function(state)
+    InfiniteJumpEnabled = state
+end)
+
+game:GetService("UserInputService").JumpRequest:Connect(function()
+    if InfiniteJumpEnabled then
+        local humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+        if humanoid then
+            humanoid:ChangeState("Jumping")
+        end
+    end
+end)
+
+-- NoClip Checkbox
+local NoClipEnabled = false
+OtherSection:NewToggle("NoClip", "Toggle NoClip mode", function(state)
+    NoClipEnabled = state
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = not state
+            end
+        end
+    end
+end)
+
+game:GetService("RunService").Stepped:Connect(function()
+    if NoClipEnabled then
+        local character = game.Players.LocalPlayer.Character
+        if character then
+            for _, part in pairs(character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end
+end)
+
+-- Skybox
+local skyboxId = ""
+OtherSection:NewLabel("Change Skybox")
+OtherSection:NewTextBox("Skybox ID", "Enter asset ID for skybox", function(text)
+    skyboxId = text
+end)
+OtherSection:NewButton("Ok", "Apply skybox", function()
+    if skyboxId ~= "" then
+        local sky = Instance.new("Sky")
+        sky.SkyboxBk = "rbxassetid://" .. skyboxId
+        sky.SkyboxDn = "rbxassetid://" .. skyboxId
+        sky.SkyboxFt = "rbxassetid://" .. skyboxId
+        sky.SkyboxLf = "rbxassetid://" .. skyboxId
+        sky.SkyboxRt = "rbxassetid://" .. skyboxId
+        sky.SkyboxUp = "rbxassetid://" .. skyboxId
+        sky.Parent = game.Lighting
+    end
+end)
+
+-- Decal Spam кнопка запускает loadstring
+OtherSection:NewButton("Decal Spam", "Run Decal Spam script", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/tim21421423/Decal-Spam-roblox/main/Script", true))()
+end)
+
+-- Exit Tab
+local ExitTab = Window:NewTab("Exit")
+local ExitSection = ExitTab:NewSection("Exit Xploit Hub")
+
+ExitSection:NewButton("Exit", "Closes the Xploit Hub", function()
+    Library:ToggleUI()
+end)
+
+ExitSection:NewLabel("Creator By: TIMOHA9399")
